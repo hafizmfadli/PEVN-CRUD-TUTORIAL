@@ -2,10 +2,10 @@ const express = require('express')
 const app = express()
 const PORT = 3000
 const createEmployeeTable = require('./db/EmployeeStorage')
+const employees = require('./router/employees')
 
-app.get('/', async(req, res, next) => {
-    res.send("Hello World")
-})
+app.use(express.json())
+app.use('/api/employees', employees)
 
 app.listen(PORT, async() => {
     try {
