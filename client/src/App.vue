@@ -1,8 +1,7 @@
 <template>
   <v-app>
+    <Navbar />
     <v-main>
-      <Navbar />
-      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
@@ -17,3 +16,11 @@ export default {
   }
 };
 </script>
+
+<style>
+
+body{
+  height: 100000px;
+}
+
+</style>

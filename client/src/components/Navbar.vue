@@ -1,11 +1,12 @@
 <template>
     <div>
-        <v-toolbar
+        <v-app-bar
+            app
             dark
         >
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>Employee Management</v-toolbar-title>
-        </v-toolbar>
+        </v-app-bar>
 
         <v-navigation-drawer
             v-model="drawer"
@@ -33,13 +34,14 @@
                 </v-col>
             </v-row>
 
-
+            <!-- Navigasi -->
             <v-list
                 nav
                 dense
             >
                 <v-list-item-group
                     v-model="group"
+
                 >
                     <v-list-item v-for="(item, index) in items" :key="index" :to="item.route">
                         <v-list-item-icon>
@@ -51,7 +53,6 @@
                     </v-list-item>
                 </v-list-item-group>
             </v-list>
-
         </v-navigation-drawer>
 
     </div>
