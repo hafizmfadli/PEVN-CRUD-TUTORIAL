@@ -1,12 +1,14 @@
 <template>
-  <div class="home">
-    <h1>Home Page</h1>
-  </div>
+  <EmployeeTable />
 </template>
 
 <script>
+import EmployeeTable from '../components/EmployeeTable.vue'
 
 export default {
-  name: 'Home'
+  name: 'Home',
+  components:{
+    EmployeeTable
+  }
 }
 </script>
