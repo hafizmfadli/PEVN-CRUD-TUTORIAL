@@ -34,6 +34,12 @@
                         </v-toolbar>
                     </template>
 
+                    <!-- Employee Name (Link) -->
+                    <template v-slot:[`item.name`]="{ item }">
+                        <router-link :to="`/details/${item.id}/${linkNeated(item.name)}`">
+                            {{ item.name }}
+                        </router-link>
+                    </template>
 
                     <!-- Actions colom -->
                     <template v-slot:[`item.actions`]="{ item }">
@@ -72,46 +78,13 @@ export default {
                 {text: 'Actions', value: 'actions'}
             ],
             // Employees data dummies
-            employees: [
-                {
-                    "id": 1,
-                    "name": "Ishigami Senku",
-                    "gender": "Male",
-                    "departement": "Engineering",
-                    "about": "Hobi science dan Engineering"
-                },
-                {
-                    "id": 2,
-                    "name": "Chrome",
-                    "gender": "Male",
-                    "departement": "Engineering",
-                    "about": "Hobi science dan Engineering"
-                },
-                {
-                    "id": 3,
-                    "name": "Eren Yeager",
-                    "gender": "Male",
-                    "departement": "Engineering",
-                    "about": "Hobi science dan Engineering"
-                },
-                {
-                    "id": 4,
-                    "name": "Itadori Yuuji",
-                    "gender": "Male",
-                    "departement": "Engineering",
-                    "about": "MC di anime Jujutsu Kaisen"
-                },
-                {
-                    "id": 5,
-                    "name": "Zero Two",
-                    "gender": "Female",
-                    "departement": "Engineering",
-                    "about": "Heroine di anime Darling in the FranXX"
-                } 
-            ]
+            employees: []
         }
     },
     methods: {
+        linkNeated(link){
+            return link.replace(/\s+/g, '-').toLocaleLowerCase()
+        },
         deleteItem(item){
             console.log(item)
             this.selectedItemIndex = this.employees.indexOf(item)
