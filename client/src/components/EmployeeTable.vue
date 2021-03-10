@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     data(){
         return{
@@ -123,9 +125,28 @@ export default {
             })
         },
         deleteItemConfirm(){
-            this.employees.splice(this.selectedItemIndex, 1)
-            this.closeDelete()
+            const deleteEmployee = this.employees[this.selectedItemIndex]
+            axios
+                .delete(`http://localhost:3000/api/employees/${deleteEmployee.id}`)
+                .then(response => {
+                    this.employees.splice(this.selectedItemIndex, 1)
+                    this.closeDelete()
+                    console.log("DELETE SUCCESS", response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            
         }
+    },
+    mounted(){
+        axios
+            .get('http://localhost:3000/api/employees/')
+            .then(response => {
+                this.employees = response.data
+                // console.log(response.data)
+            })
+            .catch(error => console.log(error))
     }
 }
 </script>
