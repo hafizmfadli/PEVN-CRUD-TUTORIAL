@@ -1,7 +1,8 @@
 <template>
     <v-form v-model="valid">
-        <v-container>
-            <h1 class="text-center mb-10">Registration Form</h1>
+        <v-container v-if="employee">
+            <h1 class="text-center mb-10" v-if="registration">Registration Form</h1>
+            <h1 class="text-center mb-10" v-if="edit">Edit Form</h1>
 
             <!-- Fullname Text field -->
             <v-row>
@@ -67,13 +68,15 @@
                     <v-card>
 
                         <v-card-title>
-                            <p v-if="success">Employee Registration Success</p>
-                            <p v-if="!success">Employee Registration Failed</p>
+                            <p v-if="success && registration">Employee Registration Success</p>
+                            <p v-if="!success && registration">Employee Registration Failed</p>
+                            <p v-if="success && edit">Employee Edit Success</p>
+                            <p v-if="!success && edit">Employee Edit Failed</p>
                         </v-card-title>
 
                         <v-card-text>
                             <p v-if="success">You can check data in employee table</p>
-                            <p v-if="!success">Try again later</p>
+                            <p v-if="!success">Try again</p>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -81,8 +84,9 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn
+                                @click.stop="dialog = !dialog"
                                 color="primary"
-                                :to="`/`"
+                                :to="success ? '/' : $route.name"
                             >OK</v-btn>
                         </v-card-actions>
 
@@ -98,8 +102,19 @@
 import axios from 'axios'
 
 export default {
+    props: {
+        registration: {
+            type: Boolean,
+            default:false
+        },
+        edit: {
+            type: Boolean,
+            default: false
+        }
+    },
     data(){
         return{
+            employee: null,
             genderList: ["Male", "Female"],
             departementList: ["Engineering", "Training", "Bussiness", "Service", "Human Resource"],
             dialog: false,
@@ -130,23 +145,65 @@ export default {
         }
     },
     methods: {
+        editItem(item){
+            this.editedItem = Object.assign({}, item)
+        },
         save(){
-            axios({
-                method: 'post',
-                url: 'http://localhost:3000/api/employees/',
-                data: this.editedItem
-            })
-            .then(response => {
-                // Tampilkan dialog registrasi sukses
-                this.isOperationSuccess = true
-                this.dialog = true
-                console.log(response.data)
-            })
-            .catch(error => {
-                // Tampilkan dialog regitrasi gagal
-                this.dialog = true
-                console.log(error)
-            })       
+
+            if(this.registration){
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/api/employees/',
+                    data: this.editedItem
+                })
+                .then(response => {
+                    // Tampilkan dialog registrasi sukses
+                    this.isOperationSuccess = true
+                    this.dialog = true
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    // Tampilkan dialog regitrasi gagal
+                    this.isOperationSuccess = false
+                    this.dialog = true
+                    console.log(error)
+                })       
+            }
+
+            if(this.edit){
+                const id = this.$route.params.id
+                axios({
+                    method: 'put',
+                    url: `http://localhost:3000/api/employees/${id}`,
+                    data: this.editedItem
+                })
+                .then(response => {
+                    // Tampilkan dialog edit berhasil
+                    this.isOperationSuccess = true
+                    this.dialog = true
+                    console.log(response.data)
+                })
+                .catch(error => console.log(error))
+            }
+        }
+    },
+    created(){
+        if(this.edit){
+            // GET info employee yang mau di edit
+            const id = this.$route.params.id
+            axios
+                .get(`http://localhost:3000/api/employees/${id}`)
+                .then(response => {
+                    this.employee = response.data[0]
+                    this.editItem(this.employee)           
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
+
+        if(this.registration){
+            this.employee = this.editedItem
         }
     }
 }

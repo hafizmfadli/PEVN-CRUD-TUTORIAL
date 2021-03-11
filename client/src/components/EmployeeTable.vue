@@ -43,12 +43,15 @@
 
                     <!-- Actions colom -->
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon
-                            
-                            class="mr-2"
-                        >
-                            mdi-pencil
-                        </v-icon>
+                        <router-link style="text-decoration:none;" :to="`/edit/${item.id}/${linkNeated(item.name)}`">
+                            <v-icon
+                                
+                                class="mr-2"
+                            >
+                                mdi-pencil
+                            </v-icon>
+                        </router-link>
+
                         <v-icon
                             @click="deleteItem(item)"
                         >
