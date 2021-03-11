@@ -1,91 +1,97 @@
 <template>
-    <v-container>
-        <h1 class="text-center mb-10">Registration Form</h1>
+    <v-form v-model="valid">
+        <v-container>
+            <h1 class="text-center mb-10">Registration Form</h1>
 
-        <!-- Fullname Text field -->
-        <v-row>
-            <v-col cols="5">
-                <v-text-field
-                    v-model="editedItem.name"
-                    label="Employee Fullname"
-                ></v-text-field>
-            </v-col>
-        </v-row>
+            <!-- Fullname Text field -->
+            <v-row>
+                <v-col cols="5">
+                    <v-text-field
+                        v-model="editedItem.name"
+                        :rules="nameRules"
+                        label="Employee Fullname"
+                    ></v-text-field>
+                </v-col>
+            </v-row>
 
-        <!-- Gender dropdown -->
-        <v-row>
-            <v-col cols="5">
-                <v-select
-                    v-model="editedItem.gender"
-                    :items="genderList"
-                    label="Gender"
+            <!-- Gender dropdown -->
+            <v-row>
+                <v-col cols="5">
+                    <v-select
+                        v-model="editedItem.gender"
+                        :rules="genderRules"
+                        :items="genderList"
+                        label="Gender"
+                    >
+                    </v-select>
+                </v-col>
+            </v-row>
+
+            <!-- Departement Autocomplete -->
+            <v-row>
+                <v-col cols="5">
+                    <v-autocomplete
+                        v-model="editedItem.departement"
+                        :rules="departementRules"
+                        :items="departementList"
+                        label="Departement"
+                    ></v-autocomplete>
+                </v-col>
+            </v-row>
+
+            <!-- About Textarea -->
+            <v-row>
+                <v-col>
+                    <v-textarea
+                        v-model="editedItem.about"
+                        outlined
+                        label="About Employee"
+                    ></v-textarea>
+                </v-col>
+            </v-row>
+
+            <!-- Actions button -->
+            <v-row>
+                <v-spacer></v-spacer>
+                <v-col cols="2">
+                    <v-btn
+                        color="primary"
+                        @click.stop="save"
+                        :disabled="!valid"
+                    >Save</v-btn>
+                </v-col>
+                <v-dialog
+                    v-model="dialog"
+                    width="500"
                 >
-                </v-select>
-            </v-col>
-        </v-row>
+                    <v-card>
 
-        <!-- Departement Autocomplete -->
-        <v-row>
-            <v-col cols="5">
-                <v-autocomplete
-                    v-model="editedItem.departement"
-                    :items="departementList"
-                    label="Departement"
-                ></v-autocomplete>
-            </v-col>
-        </v-row>
+                        <v-card-title>
+                            <p v-if="success">Employee Registration Success</p>
+                            <p v-if="!success">Employee Registration Failed</p>
+                        </v-card-title>
 
-        <!-- About Textarea -->
-        <v-row>
-            <v-col>
-                <v-textarea
-                    v-model="editedItem.about"
-                    outlined
-                    label="About Employee"
-                ></v-textarea>
-            </v-col>
-        </v-row>
+                        <v-card-text>
+                            <p v-if="success">You can check data in employee table</p>
+                            <p v-if="!success">Try again later</p>
+                        </v-card-text>
 
-        <!-- Actions button -->
-        <v-row>
-            <v-spacer></v-spacer>
-            <v-col cols="2">
-                <v-btn
-                    color="primary"
-                    @click.stop="save"
-                >Save</v-btn>
-            </v-col>
-            <v-dialog
-                v-model="dialog"
-                width="500"
-            >
-                <v-card>
+                        <v-divider></v-divider>
 
-                    <v-card-title>
-                        <p v-if="success">Employee Registration Success</p>
-                        <p v-if="!success">Employee Registration Failed</p>
-                    </v-card-title>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                color="primary"
+                                :to="`/`"
+                            >OK</v-btn>
+                        </v-card-actions>
 
-                    <v-card-text>
-                        <p v-if="success">You can check data in employee table</p>
-                        <p v-if="!success">Try again later</p>
-                    </v-card-text>
+                    </v-card>
+                </v-dialog>
+            </v-row>
 
-                    <v-divider></v-divider>
-
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            color="primary"
-                            :to="`/`"
-                        >OK</v-btn>
-                    </v-card-actions>
-
-                </v-card>
-            </v-dialog>
-        </v-row>
-
-    </v-container>
+        </v-container>
+    </v-form>
 </template>
 
 <script>
@@ -103,7 +109,19 @@ export default {
                 gender: '',
                 departement: '',
                 about: ''
-            }
+            },
+            valid: false,
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => v.length <= 40 || 'Name must be less than 40 characters',
+                v => v.length >= 3 || 'Name must be more than 3 characters'
+            ],
+            genderRules: [
+                v => !!v || 'Gender is required'
+            ],
+            departementRules: [
+                v => !!v || 'Departement is required'
+            ]
         }
     },
     computed: {
