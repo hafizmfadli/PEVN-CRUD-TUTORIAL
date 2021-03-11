@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import EmployeeDetails from '../views/EmployeeDetails.vue'
+import Registration from '../views/Registration.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,10 @@ const routes = [
   {
     path: '/details/:id/:name',
     component: EmployeeDetails
+  },
+  {
+    path: '/register-new-employee',
+    component: Registration
   }
 ]
 
