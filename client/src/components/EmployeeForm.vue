@@ -81,8 +81,9 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn
+                                @click.stop="dialog = !dialog"
                                 color="primary"
-                                :to="`/`"
+                                :to="success ? '/' : $route.name"
                             >OK</v-btn>
                         </v-card-actions>
 
