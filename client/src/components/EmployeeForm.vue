@@ -82,6 +82,11 @@
                         <v-divider></v-divider>
 
                         <v-card-actions>
+                            <v-btn
+                                v-if="edit"
+                                @click.stop="dialog = !dialog"
+                                color="primary"
+                            >Continue Editing</v-btn>
                             <v-spacer></v-spacer>
                             <v-btn
                                 @click.stop="dialog = !dialog"
