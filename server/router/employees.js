@@ -1,4 +1,5 @@
 const express = require('express')
+var debug = require('debug')('API')
 const router = express.Router()
 const db = require('../db')
 
@@ -10,8 +11,9 @@ router.post('/', async(req, res, next) => {
         const sqlParams = [employee.name, employee.gender, employee.departement, employee.about]
         const result = (await db.query(sqlText, sqlParams)).rows
         res.json(result)
+        debug(req.method + ' ' + req.baseUrl + req.url)
     } catch (error) {
-        console.error(error)
+        debug(req.method + ' ' + req.baseUrl + req.url + ' ' + error)
         next(error)
     }
 })
@@ -19,11 +21,13 @@ router.post('/', async(req, res, next) => {
 // READ seluruh employee
 router.get('/', async(req, res, next) => {
     try {
+        throw new Error('employee buatan')
         const sqlText = `SELECT * FROM employees`;
         const result = (await db.query(sqlText)).rows
         res.json(result)
+        debug(req.method + ' ' + req.baseUrl + req.url)
     } catch (error) {
-        console.error(error)
+        debug(req.method + ' ' + req.baseUrl + req.url + ' ' + error)
         next(error)
     }
 })
@@ -35,8 +39,9 @@ router.get('/:id', async(req, res, next) => {
         const sqlParams = [req.params.id]
         const result = (await db.query(sqlText, sqlParams)).rows
         res.json(result)
+        debug(req.method + ' ' + req.baseUrl + req.url)
     } catch (error) {
-        console.error(error)
+        debug(req.method + ' ' + req.baseUrl + req.url + ' ' + error)
         next(error)
     }
 })
@@ -50,8 +55,9 @@ router.put('/:id', async(req, res, next) => {
         const sqlParams = [employee.name, employee.gender, employee.departement, employee.about, req.params.id]
         const result = (await db.query(sqlText, sqlParams)).rows
         res.json(result)
+        debug(req.method + ' ' + req.baseUrl + req.url)
     } catch (error) {
-        console.error(error)
+        debug(req.method + ' ' + req.baseUrl + req.url + ' ' + error)
         next(error)
     }
 })
@@ -64,8 +70,9 @@ router.delete('/:id', async(req, res, next) => {
         const sqlParams = [req.params.id]
         const result = (await db.query(sqlText, sqlParams)).rows
         res.json(result)
+        debug(req.method + ' ' + req.baseUrl + req.url)
     } catch (error) {
-        console.error(error)
+        debug(req.method + ' ' + req.baseUrl + req.url + ' ' + error)
         next(error)
     }
 })
